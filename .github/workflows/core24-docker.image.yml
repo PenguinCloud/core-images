@@ -64,7 +64,7 @@ jobs:
       - name: Build and push Docker images to static tags
         uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
         with:
-          context: .
+          context: core24/
           push: true
           tags: ghcr.io/penguincloud/${{ env.REPO }}:latest, ghcr.io/penguincloud/${{ env.REPO }}:nightly, penguincloud/${{ env.REPO }}:${{ env.RELEASE }}
           labels: ${{ steps.meta.outputs.labels }}
