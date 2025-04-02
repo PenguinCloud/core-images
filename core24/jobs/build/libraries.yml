@@ -1,0 +1,57 @@
+---
+
+- name: Install Core APT Libraries
+  apt:
+    pkg:
+      - apt-transport-https
+      - apt-utils
+      - cron
+      - g++
+      - git
+      - gnupg2
+      - nano
+      - net-tools
+      - python3-pip
+      - software-properties-common
+      - sudo
+      - uidmap
+      - unzip
+      - uuid
+      - uuid-dev
+      - zip
+      - vim
+      - nginx-light
+    state: present
+
+- name: Add python3.11 stable repository from PPA and install its signing key on Debian target
+  ansible.builtin.apt_repository:
+    repo: 'ppa:deadsnakes/ppa'
+    codename: jammy
+
+- name: try 3.12 or fall back to 3
+  block:
+    - name: install Python 3.12
+      apt:
+        pkg:
+          - python3.12
+      ignore_errors: true
+  rescue:
+    - name: fallback to Python 3
+      apt:
+        pkg:
+          - python3
+
+- name: Install Pip libs
+  pip:
+    name:
+      - ansible
+      - boto3
+      - py4web
+    state: present
+    executable: pip3
+- name: Get minio client
+  ansible.builtin.get_url:
+    url: https://dl.minio.io/client/mc/release/linux-amd64/mc
+    dest: /usr/local/bin/mc
+    mode: 0555
+  ignore_errors: true
