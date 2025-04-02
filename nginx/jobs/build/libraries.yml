@@ -20,20 +20,27 @@
       - uuid-dev
       - zip
       - vim
+      - nginx-light
     state: present
-- name: Add python3.12 stable repository from PPA and install its signing key on Debian target
+
+- name: Add python3.11 stable repository from PPA and install its signing key on Debian target
   ansible.builtin.apt_repository:
     repo: 'ppa:deadsnakes/ppa'
     codename: jammy
-- name: Install Python 3.12 or fall back to python3
+
+- name: try 3.12 or fall back to 3
   block:
-    - apt:
+    - name: install Python 3.12
+      apt:
         pkg:
           - python3.12
+      ignore_errors: true
   rescue:
-    - apt:
+    - name: fallback to Python 3
+      apt:
         pkg:
-          - python3.11
+          - python3
+
 - name: Install Pip libs
   pip:
     name:
@@ -48,4 +55,3 @@
     dest: /usr/local/bin/mc
     mode: 0555
   ignore_errors: true
-

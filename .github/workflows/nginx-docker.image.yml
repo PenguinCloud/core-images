@@ -17,8 +17,8 @@ on:
   schedule:
     - cron: 1 1 * * 1
 env:
-  REPO: core
-  RELEASE: v5.3.0
+  REPO: core-nginx
+  RELEASE: v1.0.0
 jobs:
   push_to_registries:
     name: Push Core Docker image to multiple registries
